@@ -30,7 +30,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const NAME = "Interest Bearing CAKE";
   const SYMBOL = "ibCAKE";
   const DEBT_FAIR_LAUNCH_PID = "27";
-  const EXACT_ETA = "1652850000";
+  const EXACT_ETA = "1655265600";           // 2022-06-15 12:00:00      #1652850000
 
   const config = ConfigEntity.getConfig();
   const deployer = (await ethers.getSigners())[0];

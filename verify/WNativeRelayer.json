@@ -1,0 +1,52 @@
+{
+    "language": "Solidity",
+    "sources": {
+      "solidity/contracts/6/protocol/WNativeRelayer.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\n/**\r\n  ∩~~~~∩ \r\n  ξ ･×･ ξ \r\n  ξ　~　ξ \r\n  ξ　　 ξ \r\n  ξ　　 “~～~～〇 \r\n  ξ　　　　　　 ξ \r\n  ξ ξ ξ~～~ξ ξ ξ \r\n　 ξ_ξξ_ξ　ξ_ξξ_ξ\r\nAlpaca Fin Corporation\r\n*/\r\n\r\npragma solidity 0.6.6;\r\n\r\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\r\nimport \"@openzeppelin/contracts/utils/ReentrancyGuard.sol\";\r\n\r\nimport \"./interfaces/IWETH.sol\";\r\n\r\ncontract WNativeRelayer is Ownable, ReentrancyGuard {\r\n  address private wnative;\r\n  mapping(address => bool) private okCallers;\r\n\r\n  constructor(address _wnative) public {\r\n    wnative = _wnative;\r\n  }\r\n\r\n  modifier onlyWhitelistedCaller() {\r\n    require(okCallers[msg.sender] == true, \"WNativeRelayer::onlyWhitelistedCaller:: !okCaller\");\r\n    _;\r\n  }\r\n\r\n  function setCallerOk(address[] calldata whitelistedCallers, bool isOk) external onlyOwner {\r\n    uint256 len = whitelistedCallers.length;\r\n    for (uint256 idx = 0; idx < len; idx++) {\r\n      okCallers[whitelistedCallers[idx]] = isOk;\r\n    }\r\n  }\r\n\r\n  function withdraw(uint256 _amount) external onlyWhitelistedCaller nonReentrant {\r\n    IWETH(wnative).withdraw(_amount);\r\n    (bool success, ) = msg.sender.call{ value: _amount }(\"\");\r\n    require(success, \"WNativeRelayer::onlyWhitelistedCaller:: can't withdraw\");\r\n  }\r\n\r\n  receive() external payable {}\r\n}\r\n"
+      },
+      "@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
+        "content": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.6.0 <0.8.0;\n\n/**\n * @dev Contract module that helps prevent reentrant calls to a function.\n *\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\n * available, which can be applied to functions to make sure there are no nested\n * (reentrant) calls to them.\n *\n * Note that because there is a single `nonReentrant` guard, functions marked as\n * `nonReentrant` may not call one another. This can be worked around by making\n * those functions `private`, and then adding `external` `nonReentrant` entry\n * points to them.\n *\n * TIP: If you would like to learn more about reentrancy and alternative ways\n * to protect against it, check out our blog post\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\n */\nabstract contract ReentrancyGuard {\n    // Booleans are more expensive than uint256 or any type that takes up a full\n    // word because each write operation emits an extra SLOAD to first read the\n    // slot's contents, replace the bits taken up by the boolean, and then write\n    // back. This is the compiler's defense against contract upgrades and\n    // pointer aliasing, and it cannot be disabled.\n\n    // The values being non-zero value makes deployment a bit more expensive,\n    // but in exchange the refund on every call to nonReentrant will be lower in\n    // amount. Since refunds are capped to a percentage of the total\n    // transaction's gas, it is best to keep them low in cases like this one, to\n    // increase the likelihood of the full refund coming into effect.\n    uint256 private constant _NOT_ENTERED = 1;\n    uint256 private constant _ENTERED = 2;\n\n    uint256 private _status;\n\n    constructor () internal {\n        _status = _NOT_ENTERED;\n    }\n\n    /**\n     * @dev Prevents a contract from calling itself, directly or indirectly.\n     * Calling a `nonReentrant` function from another `nonReentrant`\n     * function is not supported. It is possible to prevent this from happening\n     * by making the `nonReentrant` function external, and make it call a\n     * `private` function that does the actual work.\n     */\n    modifier nonReentrant() {\n        // On the first call to nonReentrant, _notEntered will be true\n        require(_status != _ENTERED, \"ReentrancyGuard: reentrant call\");\n\n        // Any calls to nonReentrant after this point will fail\n        _status = _ENTERED;\n\n        _;\n\n        // By storing the original value once again, a refund is triggered (see\n        // https://eips.ethereum.org/EIPS/eip-2200)\n        _status = _NOT_ENTERED;\n    }\n}\n"
+      },
+      "@openzeppelin/contracts/access/Ownable.sol": {
+        "content": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.6.0 <0.8.0;\n\nimport \"../utils/Context.sol\";\n/**\n * @dev Contract module which provides a basic access control mechanism, where\n * there is an account (an owner) that can be granted exclusive access to\n * specific functions.\n *\n * By default, the owner account will be the one that deploys the contract. This\n * can later be changed with {transferOwnership}.\n *\n * This module is used through inheritance. It will make available the modifier\n * `onlyOwner`, which can be applied to your functions to restrict their use to\n * the owner.\n */\nabstract contract Ownable is Context {\n    address private _owner;\n\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\n\n    /**\n     * @dev Initializes the contract setting the deployer as the initial owner.\n     */\n    constructor () internal {\n        address msgSender = _msgSender();\n        _owner = msgSender;\n        emit OwnershipTransferred(address(0), msgSender);\n    }\n\n    /**\n     * @dev Returns the address of the current owner.\n     */\n    function owner() public view virtual returns (address) {\n        return _owner;\n    }\n\n    /**\n     * @dev Throws if called by any account other than the owner.\n     */\n    modifier onlyOwner() {\n        require(owner() == _msgSender(), \"Ownable: caller is not the owner\");\n        _;\n    }\n\n    /**\n     * @dev Leaves the contract without owner. It will not be possible to call\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\n     *\n     * NOTE: Renouncing ownership will leave the contract without an owner,\n     * thereby removing any functionality that is only available to the owner.\n     */\n    function renounceOwnership() public virtual onlyOwner {\n        emit OwnershipTransferred(_owner, address(0));\n        _owner = address(0);\n    }\n\n    /**\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\n     * Can only be called by the current owner.\n     */\n    function transferOwnership(address newOwner) public virtual onlyOwner {\n        require(newOwner != address(0), \"Ownable: new owner is the zero address\");\n        emit OwnershipTransferred(_owner, newOwner);\n        _owner = newOwner;\n    }\n}\n"
+      },
+      "@openzeppelin/contracts/utils/Context.sol": {
+        "content": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.6.0 <0.8.0;\n\n/*\n * @dev Provides information about the current execution context, including the\n * sender of the transaction and its data. While these are generally available\n * via msg.sender and msg.data, they should not be accessed in such a direct\n * manner, since when dealing with GSN meta-transactions the account sending and\n * paying for execution may not be the actual sender (as far as an application\n * is concerned).\n *\n * This contract is only required for intermediate, library-like contracts.\n */\nabstract contract Context {\n    function _msgSender() internal view virtual returns (address payable) {\n        return msg.sender;\n    }\n\n    function _msgData() internal view virtual returns (bytes memory) {\n        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691\n        return msg.data;\n    }\n}\n"
+      },
+      "solidity/contracts/6/protocol/interfaces/IWETH.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\n/**\r\n  ∩~~~~∩ \r\n  ξ ･×･ ξ \r\n  ξ　~　ξ \r\n  ξ　　 ξ \r\n  ξ　　 “~～~～〇 \r\n  ξ　　　　　　 ξ \r\n  ξ ξ ξ~～~ξ ξ ξ \r\n　 ξ_ξξ_ξ　ξ_ξξ_ξ\r\nAlpaca Fin Corporation\r\n*/\r\n\r\npragma solidity >=0.5.0;\r\n\r\ninterface IWETH {\r\n    function deposit() external payable;\r\n    function transfer(address to, uint256 value) external returns (bool);\r\n    function withdraw(uint256) external;\r\n}\r\n"
+      }
+    },
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 1
+      },
+      "evmVersion": "istanbul",
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "evm.bytecode.object",
+            "evm.deployedBytecode.object",
+            "abi",
+            "evm.bytecode.sourceMap",
+            "evm.deployedBytecode.sourceMap",
+            "metadata",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "devdoc",
+            "userdoc",
+            "storageLayout",
+            "evm.gasEstimates"
+          ]
+        }
+      },
+      "metadata": {
+        "useLiteralContent": true
+      }
+    }
+}

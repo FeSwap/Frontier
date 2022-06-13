@@ -1,6 +1,6 @@
 {
   "ProxyAdmin": "0x2c6c09b46d00A88161B7e4AcFaFEc58990548aC2",
-  "Timelock": "0xb3c3aE82358DF7fC0bd98629D5ed91767e45c337",
+  "Timelock": "0x5dD0c96B999F1b794a729fc65B6222fE5f08E500",
   "Shield": "0x938350DF8BF3bD81Baae368b72132f1Bd14E7C13",
   "MultiCall": "0xae11C5B5f29A6a25e955F0CB8ddCc416f522AF5C",
   "MerkleDistributor": {
@@ -931,7 +931,7 @@
     "TripleSlopeModel": "0x2Fe7097cf766DfE06f9e2eD3021f8a4bbEf468Dd",
     "TripleSlopeModelStable20Max150": "0x038cd7a6A397d7f5D07a0c76A4610a7Ca64eb7d3",
     "TripleSlopeModel103": "0x111ae8da53D0998260DfdfA2172d4f88f969d386",
-    "WNativeRelayer": "0x7e2284c8CC74F13FA6c218c4231b0786E6204728",
+    "WNativeRelayer": "0xbf4bB01db015a615f69f226A2449c9Ec964312E7",
     "WorkerConfig": "0x8ae5e14864090E9332Ceb238F7cEa183d7C056a7",
     "PancakeswapSingleAssetWorkerConfig": "0x84c8c614826f312BE90f0161498e3d57646Ef34f"
   },
@@ -942,6 +942,59 @@
     "DeltaNeutralOracle": "0xa3D3294E4f1c1Fc78C2Eb8d295334384E2Dab52a"
   },
   "Vaults": [
+    {
+      "name": "Interest Bearing CAKE",
+      "symbol": "ibCAKE",
+      "address": "0x952d22c772D78bBD06259B96143DA15CBd9BEb87",
+      "deployedBlock": 20162816,
+      "baseToken": "0x7aBcA3B5f0Ca1da0eC05631d5788907D030D0a22",
+      "debtToken": "0x03E6282Ea6A8365E5F85deb3a48cC3AA5a0F018E",
+      "config": "0x172ed183e5fad1e8488246a8028b78b9e17e31ac",
+      "tripleSlopeModel": "0x111ae8da53D0998260DfdfA2172d4f88f969d386",
+      "StrategyAddTwoSidesOptimal": {
+        "Pancakeswap": "0x0A5515aEdc275b9fF19d11Cd74465e83067f6D40",
+        "Waultswap": "0xC01390eea9A7e27199e03dA5053C2dd63A5169ff",
+        "PancakeswapSingleAsset": "0x821154e5F621F534060E56871bC614Aa43528356",
+        "Mdex": "0x6E0F5224Ae9F6fFD0Bf617676EE9Ffd783301893",
+        "Biswap": "0x0000000000000000000000000000000000000000"
+      },
+      "workers": [
+        {
+          "name": "CAKE-WBNB PancakeswapWorker",
+          "address": "0xff054a8548e5D2731f3bB4bBAFD2D8a281b49E53",
+          "deployedBlock": 8803736,
+          "config": "0x8ae5e14864090E9332Ceb238F7cEa183d7C056a7",
+          "pId": 21,
+          "stakingToken": "0x9cC2bed47Aa2346f7d01F53d888724c87c810EC2",
+          "stakingTokenAt": "0xbCC50b0B0AFD19Ee83a6E79e6c01D51b16090A0B",
+          "strategies": {
+            "StrategyAddAllBaseToken": "0x2943b6fC64bDF5bD26E9DFeB9b35d1DBcbdE936C",
+            "StrategyLiquidate": "0x58Bbb507248635413172Ed7A2eeC048402C6b39b",
+            "StrategyAddTwoSidesOptimal": "0x0A5515aEdc275b9fF19d11Cd74465e83067f6D40",
+            "StrategyWithdrawMinimizeTrading": "0xD8196dc675E92021aC40d42a8cF437789CD1aC32",
+            "StrategyPartialCloseLiquidate": "0x566aC15667Ae05c1F50Ed9944Aeef5A9dae4AB55",
+            "StrategyPartialCloseMinimizeTrading": "0xBb79EB494Da88F115430D174D5372b51Fc37De50"
+          }
+        },
+        {
+          "name": "BTCB-WBNB PancakeswapWorker",
+          "address": "0xE901f33dE3a92cea4E7402285fF28Fa8ca1Fd528",
+          "deployedBlock": 8804800,
+          "config": "0x8ae5e14864090E9332Ceb238F7cEa183d7C056a7",
+          "pId": 22,
+          "stakingToken": "0xdF85a773771875F96493FDdB341A197d860Bc90d",
+          "stakingTokenAt": "0xbCC50b0B0AFD19Ee83a6E79e6c01D51b16090A0B",
+          "strategies": {
+            "StrategyAddAllBaseToken": "0x2943b6fC64bDF5bD26E9DFeB9b35d1DBcbdE936C",
+            "StrategyLiquidate": "0x58Bbb507248635413172Ed7A2eeC048402C6b39b",
+            "StrategyAddTwoSidesOptimal": "0x0A5515aEdc275b9fF19d11Cd74465e83067f6D40",
+            "StrategyWithdrawMinimizeTrading": "0xD8196dc675E92021aC40d42a8cF437789CD1aC32",
+            "StrategyPartialCloseLiquidate": "0x566aC15667Ae05c1F50Ed9944Aeef5A9dae4AB55",
+            "StrategyPartialCloseMinimizeTrading": "0xBb79EB494Da88F115430D174D5372b51Fc37De50"
+          }
+        }
+      ]
+    },
     {
       "name": "Interest Bearing WBNB",
       "symbol": "ibWBNB",
@@ -3187,5 +3240,9 @@
       "assetVaultPosId": "180",
       "stableVaultPosId": "370"
     }
-  ]
+  ],
+  "AutomatedVaultController": {
+    "address": "0x0191dFA8d04F227873A4e54bAEBE6cC960FED322",
+    "creditors": []
+  }
 }

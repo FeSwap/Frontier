@@ -1,0 +1,229 @@
+$ hardhat test --no-compile ./test/integrations/protocol/workers/pcs/Vault_PancakeswapV2.test.ts
+
+
+  Vault - PancakeswapV2
+    when worker is initialized
+      ¡Ì should has FTOKEN as a farmingToken in PancakeswapWorker
+      ¡Ì should initialized the correct fee and feeDenom
+      ¡Ì should give rewards out when you stake LP tokens (1582ms)
+    when owner is setting worker
+      ¡Ì should set reinvest bounty if < max
+      ¡Ì should set max reinvest bounty
+      ¡Ì should revert when owner set reinvestBountyBps > max (80ms)
+      ¡Ì should set strat ok
+    when user uses LYF
+      when user is contract
+        ¡Ì should revert if evil contract try to call onlyEOAorWhitelisted function
+        ¡Ì should allow whitelisted contract to open position without debt (355ms)
+        ¡Ì should revert if evil contract try to call onlyWhitelistedLiquidators function
+      when user is EOA
+        #work
+          ¡Ì should allow to open a position without debt (2882ms)
+          ¡Ì should not allow to open a position with debt less than MIN_DEBT_SIZE (310ms)
+          ¡Ì should not allow to open the position with bad work factor (311ms)
+          ¡Ì should not allow positions if Vault has less BaseToken than requested loan (95ms)
+          1) should work
+          2) should has correct interest rate growth
+          3) should close position correctly when user holds multiple positions
+          4) should close position correctly when user holds mix positions of leveraged and non-leveraged
+        #kill
+          ¡Ì should not allow user not whitelisted to liquidate
+          5) should not able to liquidate healthy position
+          6) should be able to liquidate bad position
+          ¡Ì should liquidate user position correctly (8912ms)
+        #onlyApprovedHolder
+          7) should be not allow user to emergencyWithdraw debtToken on FairLaunch
+        #deposit-withdraw
+          ¡Ì should deposit and withdraw BTOKEN from Vault (bad debt case) (8505ms)
+        #reinvest
+          8) should reinvest correctly
+        #partialclose
+          #liquidate
+            when maxReturn is lessDebt
+              9) should pay debt 'maxReturn' BTOKEN and return 'liquidatedAmount - maxReturn' BTOKEN to user
+            when debt is lessDebt
+              ¡Ì should pay back all debt and return 'liquidatedAmount - debt' BTOKEN to user (7073ms)
+            when back is lessDebt
+              when maxDebtRepayment < debt
+                ¡Ì should revert bad work factor (3340ms)
+              when maxDebtRepayment >= debt
+                ¡Ì should revert subtraction overflow (4324ms)
+            when work factor is not satisfy
+              ¡Ì should revert (3254ms)
+          #minimize
+            when maxReturn is lessDebt
+              ¡Ì should pay debt 'maxReturn' BTOKEN and return 'liquidatedAmount - maxReturn' BTOKEN to user  (7490ms)
+            when debt is lessDebt
+              ¡Ì should pay back all debt and return 'liquidatedAmount - debt' BTOKEN to user (6812ms)
+            when back is lessDebt
+              ¡Ì should revert (3200ms)
+            when work factor is not satisfy
+              ¡Ì should revert bad work factor (3004ms)
+
+
+  25 passing (2m)
+  9 failing
+
+  1) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #work
+             should work:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  2) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #work
+             should has correct interest rate growth:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  3) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #work
+             should close position correctly when user holds multiple positions:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  4) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #work
+             should close position correctly when user holds mix positions of leveraged and non-leveraged:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  5) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #kill
+             should not able to liquidate healthy position:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  6) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #kill
+             should be able to liquidate bad position:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  7) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #onlyApprovedHolder
+             should be not allow user to emergencyWithdraw debtToken on FairLaunch:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  8) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #reinvest
+             should reinvest correctly:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
+
+  9) Vault - PancakeswapV2
+       when user uses LYF
+         when user is EOA
+           #partialclose
+             #liquidate
+               when maxReturn is lessDebt
+                 should pay debt 'maxReturn' BTOKEN and return 'liquidatedAmount - maxReturn' BTOKEN to user:
+     InvalidArgumentsError: Errors encountered in param 0: Invalid value "0x015180" supplied to : (QUANTITY | number)/0: QUANTITY, Invalid value "0x015180" supplied to : (QUANTITY | number)/1: number
+      at validateParams (node_modules\hardhat\src\internal\core\jsonrpc\types\input\validation.ts:64:13)
+      at EvmModule._increaseTimeParams (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:104:26)
+      at EvmModule.processRequest (node_modules\hardhat\src\internal\hardhat-network\provider\modules\evm.ts:45:49)
+      at HardhatNetworkProvider._send (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:206:31)
+      at runMicrotasks (<anonymous>)
+      at processTicksAndRejections (internal/process/task_queues.js:95:5)
+      at runNextTicks (internal/process/task_queues.js:64:3)
+      at listOnTimeout (internal/timers.js:526:9)
+      at processTimers (internal/timers.js:500:7)
+      at HardhatNetworkProvider.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:117:18)
+      at EthersProviderWrapper.send (node_modules\@nomiclabs\hardhat-ethers\src\internal\ethers-provider-wrapper.ts:13:20)
